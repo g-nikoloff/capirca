@@ -183,7 +183,7 @@ def RenderFile(base_directory: str, input_file: pathlib.Path,
   msmpc = False
   spd = False
   nsx = False
-  nsxt1 = False
+  nsxt_pol = False
   oc = False
   pcap_accept = False
   pcap_deny = False
@@ -250,7 +250,7 @@ def RenderFile(base_directory: str, input_file: pathlib.Path,
   if 'nsxv' in platforms:
     nsx = copy.deepcopy(pol)
   if 'nsxt' in platforms:
-    nsxt1 = copy.deepcopy(pol)
+    nsxt_pol = copy.deepcopy(pol)
   if 'openconfig' in platforms:
     oc = copy.deepcopy(pol)
   if 'packetfilter' in platforms:
@@ -355,8 +355,8 @@ def RenderFile(base_directory: str, input_file: pathlib.Path,
       RenderACL(
           str(acl_obj), acl_obj.SUFFIX, output_directory, input_file,
           write_files)
-    if nsxt1:
-      acl_obj = nsxt.Nsxt(nsxt1, exp_info)
+    if nsxt_pol:
+      acl_obj = nsxt.Nsxt(nsxt_pol, exp_info)
       RenderACL(
           str(acl_obj), acl_obj.SUFFIX, output_directory, input_file,
           write_files)
@@ -450,24 +450,23 @@ def RenderFile(base_directory: str, input_file: pathlib.Path,
 
   # TODO(robankeny) add additional errors.
   except (
-      juniper.Error,
-      junipermsmpc.Error,
-      junipersrx.Error,
-      cisco.Error,
-      ipset.Error,
-      iptables.Error,
-      speedway.Error,
-      pcap.Error,
-      sonic.Error,
-      aclgenerator.Error,
-      aruba.Error,
-      nftables.Error,
-      gce.Error,
-      gce_vpc_tf.Error,
-      cloudarmor.Error,
-      k8s.Error) as e:
-    raise ACLGeneratorError('Error generating target ACL for %s:\n%s' %
-                            (input_file, e))
+    juniper.Error,
+    junipermsmpc.Error,
+    junipersrx.Error,
+    cisco.Error,
+    ipset.Error,
+    iptables.Error,
+    speedway.Error,
+    pcap.Error,
+    sonic.Error,
+    aclgenerator.Error,
+    aruba.Error,
+    nftables.Error,
+    gce.Error,
+    gce_vpc_tf.Error,
+    cloudarmor.Error,
+    k8s.Error) as e:
+    raise ACLGeneratorError('Error generating target ACL for %s:\n%s' % (input_file, e))
 
 
 def RenderACL(acl_text: str,
